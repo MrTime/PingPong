@@ -4,7 +4,6 @@
     <script src="js/three.js"></script>
     <script>
       var camera, scene, renderer;
-      var geometry, material, mesh;
 
       window.onload = function() {
         init();
@@ -12,16 +11,24 @@
       }
 
       function init() {
-        camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
-        camera.position.z = 300;
+        camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 10000);
+        camera.position.z = 100;
+        camera.position.y = 25;
 
         scene = new THREE.Scene();
 
-        geometry = new THREE.CubeGeometry(200, 200, 200);
-        material = new THREE.MeshBasicMaterial({color: 0xff0000, wireframe:true});
+        addTable(scene);
+        //addBall(scene);
+        //addRocket(scene, -50.0, 0.0);
+        //addRocket(scene, 50.0, 0.0);
 
-        mesh = new THREE.Mesh(geometry, material);
-        scene.add(mesh);
+        pointLight = new THREE.PointLight(0xffffff);
+
+        pointLight.position.x = 0;
+        pointLight.position.y = 20;
+        pointLight.position.z = 0;
+
+        scene.add(pointLight);
 
         renderer = new THREE.WebGLRenderer();
         renderer.setSize(window.innerWidth, window.innerHeight);
@@ -29,11 +36,24 @@
         document.getElementById("canvas").appendChild(renderer.domElement);
       }   
 
+      function addTable(scene) {
+        geometry = new THREE.CubeGeometry(55.66, 2.0, 100);
+        material = new THREE.MeshLambertMaterial({color: 0x00aa00});
+        mesh = new THREE.Mesh(geometry, material);
+        scene.add(mesh);
+
+        net_geometry = new THREE.CubeGeometry(61.23, 5.57, 0.5);
+        net_material = new THREE.MeshPhongMaterial({color: 0x333333, opacity:0.8, transparent:true});
+        net_mesh = new THREE.Mesh(net_geometry, net_material);
+        net_mesh.position.y = 4.28;
+        scene.add(net_mesh);
+      }
+
       function animate() {
         requestAnimationFrame(animate);
 
-        mesh.rotation.x += 0.01;
-        mesh.rotation.y += 0.02;
+        //mesh.rotation.x += 0.01;
+        //mesh.rotation.y += 0.02;
 
         renderer.render(scene, camera);
       }
